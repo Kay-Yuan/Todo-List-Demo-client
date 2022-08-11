@@ -1,0 +1,148 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { PreTask, Task } from './task';
+import { tap, catchError } from 'rxjs/operators';
+
+@Injectable()
+export class TaskService {
+  private tasks: Task[] = [];
+  // private completedTasks: Task[];
+  private url = 'http://localhost:3000';
+
+  constructor(private http: HttpClient) {
+    this.getTasksFromServer();
+  }
+
+  getTasksFromServer(): Observable<Task[]> {
+    return this.http.get(`${this.url}/task?offset=0`).pipe(
+      tap((data: any[]) => {
+        this.tasks = data as Task[];
+        console.log(this.tasks);
+      }),
+      catchError(this.handleError('getTasksFromServer', []))
+    );
+
+    // this.http.get(`${this.url}/task?offset=0`).subscribe(
+    //   (data: any[]) => {
+    //     this.tasks = data as Task[];
+    //     console.log(this.tasks);
+    //   },
+    //   (error) => {
+    //     console.log(error);
+    //   }
+    // );
+  }
+
+  getTasks(): Task[] {
+    // this.getTasksFromServer();
+    return this.tasks;
+  }
+
+  createTask(task: any): Observable<object> {
+    return this.http.post(`${this.url}/task/create`, task).pipe(
+      tap((data: any) => {
+        task.id = data.id;
+        task.completed = false;
+        task.isEdit = false;
+        task.createdAt = data.createdAt;
+        task.updatedAt = data.updatedAt;
+        this.tasks.push(task);
+      }),
+      catchError(this.handleError('createTask', []))
+    );
+    // this.http.post(`${this.url}/task/create`, task).subscribe(
+    //   (data: any) => {
+    //     console.log(data);
+    //     if (data.message === 'Task created') {
+    //       task.id = data.id;
+    //       task.completed = false;
+    //       task.createdAt = data.createdAt;
+    //       task.updatedAt = data.updatedAt;
+    //       this.tasks.push(task);
+    //     }
+    //   },
+    //   (error) => {
+    //     console.log(error);
+    //   }
+    // );
+  }
+
+  updateTask(task: any): Observable<object> {
+    return this.http.put(`${this.url}/task/${task.id}`, task).pipe(
+      tap((data) => {}),
+      catchError(this.handleError('updateTask', []))
+    );
+  }
+
+  deleteTask(task: Task): void {
+    // return this.http.delete(`${this.url}/task/${id}`).pipe(
+    //   tap((data) => {}),
+    //   catchError(this.handleError('deleteTask', []))
+    // );
+    this.http.delete(`${this.url}/task/${task?.id}`).subscribe(
+      (data: any) => {
+        console.log(data);
+        if (data.message === 'Task deleted') {
+          if (task.completed) {
+            this.tasks = this.tasks.filter((t) => t.id !== task?.id);
+          }
+        }
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+
+  // addTaskIntoCompleted(task: Task) {
+  //   this.tasks = this.tasks.filter((t) => t.id !== task.id);
+  //   this.completedTasks.push(task);
+  //   // this.updateTask(task).subscribe();
+  //   this.sortTasks(this.completedTasks);
+  // }
+
+  toggleTask(task: Task) {
+    // task.completed = !task.completed;
+    // this.updateTask(task).subscribe();
+    // this.sortTasks(this.tasks);
+  }
+
+  sortTasks(
+    tasks: Task[],
+    sortBy: string = 'urgentLevel',
+    sortOrder: string = 'asc'
+  ): Task[] {
+    if (sortBy === 'urgentLevel') {
+      tasks.sort((a, b) => {
+        if (sortOrder === 'asc') {
+          return a.urgentLevel - b.urgentLevel;
+        } else {
+          return b.urgentLevel - a.urgentLevel;
+        }
+      });
+    } else {
+      tasks.sort((a, b) => {
+        if (sortOrder === 'asc') {
+          return a[sortBy] - b[sortBy];
+        } else {
+          return b[sortBy] - a[sortBy];
+        }
+      });
+    }
+    return tasks;
+  }
+
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      // TODO: send the error to remote logging infrastructure
+      console.error(error); // log to console instead
+
+      // TODO: better job of transforming error for user consumption
+      //   this.log(`${operation} failed: ${error.message}`);
+
+      // Let the app keep running by returning an empty result.
+      return of(result as T);
+    };
+  }
+}

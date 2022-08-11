@@ -1,0 +1,179 @@
+<form
+  #newTask="ngForm"
+  (ngSubmit)="addTask(newTask.value); newTask.resetForm()"
+>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="3">
+        <ion-item>
+          <ion-label position="floating">Task Title</ion-label>
+          <ion-input
+            required
+            type="text"
+            ngModel
+            name="title"
+            #taskTitle
+          ></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="3">
+        <ion-item style="padding-top: 7px">
+          <ion-label>Urgent Level</ion-label>
+          <ion-select ngModel name="urgentLevel">
+            <ion-select-option value="1">1</ion-select-option>
+            <ion-select-option value="2">2</ion-select-option>
+            <ion-select-option value="3">3</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Description</ion-label>
+          <ion-input
+            type="text"
+            ngModel
+            name="description"
+            (keyup.enter)="
+              newTask.valid && addTask(newTask.value); newTask.resetForm()
+            "
+          ></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-button
+    id="add-task-button"
+    size="default"
+    color="primary"
+    type="submit"
+    [disabled]="newTask.invalid"
+    >Add Task</ion-button
+  >
+</form>
+
+<div id="container">
+  <ion-list id="task-list">
+    <ion-list-header>
+      <ion-label>Title</ion-label>
+      <ion-label>Urgent Level</ion-label>
+      <ion-label>Description</ion-label>
+    </ion-list-header>
+
+    <ion-item *ngFor="let task of toDoTasks" (click)="toggleTask(task)">
+      <ion-checkbox slot="start" [checked]="task.completed"></ion-checkbox>
+
+      <ion-label>{{ task.title }}</ion-label>
+      <ion-label>{{ task.urgentLevel }}</ion-label>
+      <ion-label>{{ task.description }}</ion-label>
+
+      <ion-button shape="round" fill="clear" (click)="openModel(task)">
+        <ion-icon name="create-outline"></ion-icon
+      ></ion-button>
+      <ion-button
+        click-stop-propagation
+        color="medium"
+        shape="round"
+        fill="clear"
+        (click)="deleteTaskFromTaskList(task)"
+      >
+        <ion-icon name="close-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+</div>
+
+<ion-modal [isOpen]="isModalOpen">
+  <ng-template>
+    <form [formGroup]="updateTaskForm">
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button (click)="cancel()">Cancel</ion-button>
+          </ion-buttons>
+          <ion-title>Edit Task</ion-title>
+          <ion-buttons slot="end">
+            <ion-button
+              id="add-task-button"
+              size="default"
+              color="primary"
+              type="submit"
+              [disabled]="updateTaskForm.invalid"
+              (click)="updateTask(updateTaskForm)"
+              [strong]="true"
+              >Confirm</ion-button
+            >
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label position="floating">Task Title</ion-label>
+              <ion-input
+                required
+                type="text"
+                formControlName="title"
+                #taskTitle
+              ></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-item style="padding-top: 7px">
+              <ion-label>Urgent Level</ion-label>
+              <ion-select formControlName="urgentLevel">
+                <ion-select-option value="1">1</ion-select-option>
+                <ion-select-option value="2">2</ion-select-option>
+                <ion-select-option value="3">3</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label position="floating">Description</ion-label>
+              <ion-input
+                type="text"
+                formControlName="description"
+                (keyup.enter)="
+                  newTask.valid && updateTask(updateTaskForm.value);
+                  newTask.resetForm()
+                "
+              ></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+  </ng-template>
+</ion-modal>
+
+<div id="completed">
+  <ion-list id="task-list">
+    <ion-list-header>
+      <ion-label>Finished</ion-label>
+    </ion-list-header>
+    <ion-item *ngFor="let task of completedTasks" (click)="unToggleTask(task)">
+      <ion-label>{{ task.title }}</ion-label>
+      <ion-label>{{ task.urgentLevel }}</ion-label>
+      <ion-label>{{ task.description }}</ion-label>
+      <ion-checkbox slot="start" [checked]="task.completed"></ion-checkbox>
+      <ion-button shape="round" fill="clear">
+        <ion-icon name="create-outline"></ion-icon
+      ></ion-button>
+      <ion-button
+        click-stop-propagation
+        color="medium"
+        shape="round"
+        fill="clear"
+        (click)="deleteTaskFromCompleted(task)"
+      >
+        <ion-icon name="close-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+</div>
