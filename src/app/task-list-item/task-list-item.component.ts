@@ -2,9 +2,7 @@ import { Component, OnInit, Output, ViewChild } from '@angular/core';
 import { Task } from '../task';
 import { TaskService } from '../task.service';
 
-import { IonModal, isPlatform, ModalController } from '@ionic/angular';
-import { EditTaskModelComponent } from '../edit-task-model/edit-task-model.component';
-import { OverlayEventDetail } from '@ionic/core/components';
+import { IonModal } from '@ionic/angular';
 import { FormControl, FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-task-list-item',
@@ -28,10 +26,7 @@ export class TaskListItemComponent implements OnInit {
     'This modal example uses the modalController to present and dismiss modals.';
   name: string;
 
-  constructor(
-    private taskService: TaskService,
-    private modalCtrl: ModalController
-  ) {}
+  constructor(private taskService: TaskService) {}
 
   ngOnInit() {
     this.updateForm();
@@ -62,7 +57,6 @@ export class TaskListItemComponent implements OnInit {
     this.completedTasks = this.sortTasks(this.completedTasks);
 
     //update task status
-    this.taskService.toggleTask(task);
   }
 
   unToggleTask(task: Task) {
@@ -75,28 +69,15 @@ export class TaskListItemComponent implements OnInit {
     this.toDoTasks = this.sortTasks(this.toDoTasks);
 
     //update task status
-    this.taskService.toggleTask(task);
   }
-
-  // addTaskIntoCompleted(task: Task) {
-  //   this.completedTasks.push(task);
-  //   this.taskService.sortTasks(this.completedTasks);
-  // }
-
-  // addTaskIntoTasks(task: Task) {
-  //   this.toDoTasks.push(task);
-  //   this.taskService.sortTasks(this.tasks);
-  // }
 
   deleteTaskFromTaskList(task: Task) {
     this.taskService.deleteTask(task);
-    // this.tasks = this.taskService.getTasks();
     this.toDoTasks = this.toDoTasks.filter((t) => t.id !== task?.id);
   }
 
   deleteTaskFromCompleted(task: Task) {
     this.taskService.deleteTask(task);
-    // this.completedTasks = this.taskService.getCompletedTasks();
     this.completedTasks = this.completedTasks.filter((t) => t.id !== task?.id);
   }
 
@@ -188,40 +169,7 @@ export class TaskListItemComponent implements OnInit {
     return tasks;
   }
 
-  // async updateTask(task: Task) {
-  //   const modal = await this.modalCtrl.create({
-  //     component: EditTaskModelComponent,
-  //   });
-  //   modal.present();
-
-  //   const { data, role } = await modal.onWillDismiss();
-
-  //   if (role === 'confirm') {
-  //     this.message = `Hello, ${data}!`;
-  //   }
-  // }
-
-  // cancel() {
-  //   this.modal.dismiss(null, 'cancel');
-  //   console.log('isModalOpen is ' + this.isModalOpen);
-  // }
-
-  // confirm() {
-  //   this.modal.dismiss(null, 'confirm');
-  // }
-
-  // onWillDismiss(event: Event) {
-  //   const ev = event as CustomEvent<OverlayEventDetail<string>>;
-  //   if (ev.detail.role === 'confirm') {
-  //     this.message = `Hello, ${ev.detail.data}!`;
-  //   }
-  // }
-
   cancel() {
     this.isModalOpen = false;
   }
-
-  // confirm() {
-  //   this.isModalOpen = false;
-  // }
 }

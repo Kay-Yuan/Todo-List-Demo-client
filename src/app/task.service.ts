@@ -1,13 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { PreTask, Task } from './task';
+import { Task } from './task';
 import { tap, catchError } from 'rxjs/operators';
 
 @Injectable()
 export class TaskService {
   private tasks: Task[] = [];
-  // private completedTasks: Task[];
   private url = 'http://localhost:3000';
 
   constructor(private http: HttpClient) {
@@ -22,20 +21,9 @@ export class TaskService {
       }),
       catchError(this.handleError('getTasksFromServer', []))
     );
-
-    // this.http.get(`${this.url}/task?offset=0`).subscribe(
-    //   (data: any[]) => {
-    //     this.tasks = data as Task[];
-    //     console.log(this.tasks);
-    //   },
-    //   (error) => {
-    //     console.log(error);
-    //   }
-    // );
   }
 
   getTasks(): Task[] {
-    // this.getTasksFromServer();
     return this.tasks;
   }
 
@@ -51,35 +39,15 @@ export class TaskService {
       }),
       catchError(this.handleError('createTask', []))
     );
-    // this.http.post(`${this.url}/task/create`, task).subscribe(
-    //   (data: any) => {
-    //     console.log(data);
-    //     if (data.message === 'Task created') {
-    //       task.id = data.id;
-    //       task.completed = false;
-    //       task.createdAt = data.createdAt;
-    //       task.updatedAt = data.updatedAt;
-    //       this.tasks.push(task);
-    //     }
-    //   },
-    //   (error) => {
-    //     console.log(error);
-    //   }
-    // );
   }
 
   updateTask(task: any): Observable<object> {
-    return this.http.put(`${this.url}/task/${task.id}`, task).pipe(
-      tap((data) => {}),
-      catchError(this.handleError('updateTask', []))
-    );
+    return this.http
+      .put(`${this.url}/task/${task.id}`, task)
+      .pipe(catchError(this.handleError('updateTask', [])));
   }
 
   deleteTask(task: Task): void {
-    // return this.http.delete(`${this.url}/task/${id}`).pipe(
-    //   tap((data) => {}),
-    //   catchError(this.handleError('deleteTask', []))
-    // );
     this.http.delete(`${this.url}/task/${task?.id}`).subscribe(
       (data: any) => {
         console.log(data);
@@ -93,19 +61,6 @@ export class TaskService {
         console.log(error);
       }
     );
-  }
-
-  // addTaskIntoCompleted(task: Task) {
-  //   this.tasks = this.tasks.filter((t) => t.id !== task.id);
-  //   this.completedTasks.push(task);
-  //   // this.updateTask(task).subscribe();
-  //   this.sortTasks(this.completedTasks);
-  // }
-
-  toggleTask(task: Task) {
-    // task.completed = !task.completed;
-    // this.updateTask(task).subscribe();
-    // this.sortTasks(this.tasks);
   }
 
   sortTasks(
@@ -137,12 +92,13 @@ export class TaskService {
     return (error: any): Observable<T> => {
       // TODO: send the error to remote logging infrastructure
       console.error(error); // log to console instead
+      console.log(`${operation} failed: ${error.message}`);
 
       // TODO: better job of transforming error for user consumption
       //   this.log(`${operation} failed: ${error.message}`);
 
       // Let the app keep running by returning an empty result.
-      return of(result as T);
+      return of(result);
     };
   }
 }

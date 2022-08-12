@@ -1,10 +1,6 @@
 import { Directive } from '@angular/core';
 
 @Directive({
-  selector: '[appStopClick]'
+  selector: '[appStopClick]',
 })
-export class StopClickDirective {
-
-  constructor() { }
-
-}
+export class StopClickDirective {}
