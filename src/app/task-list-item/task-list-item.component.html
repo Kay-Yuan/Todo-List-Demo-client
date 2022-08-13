@@ -58,27 +58,13 @@
       <ion-label>Urgent Level</ion-label>
       <ion-label>Description</ion-label>
     </ion-list-header>
-
-    <ion-item *ngFor="let task of toDoTasks" (click)="toggleTask(task)">
-      <ion-checkbox slot="start" [checked]="task.completed"></ion-checkbox>
-
-      <ion-label>{{ task.title }}</ion-label>
-      <ion-label>{{ task.urgentLevel }}</ion-label>
-      <ion-label>{{ task.description }}</ion-label>
-
-      <ion-button shape="round" fill="clear" (click)="openModel(task)">
-        <ion-icon name="create-outline"></ion-icon
-      ></ion-button>
-      <ion-button
-        click-stop-propagation
-        color="medium"
-        shape="round"
-        fill="clear"
-        (click)="deleteTaskFromTaskList(task)"
-      >
-        <ion-icon name="close-circle-outline"></ion-icon>
-      </ion-button>
-    </ion-item>
+    <app-task-item
+      *ngFor="let task of toDoTasks"
+      [task]="task"
+      (openModel)="openModel(task)"
+      (toggleTask)="toggleTask(task)"
+      (deleteTaskFromTaskList)="deleteTaskFromTaskList(task)"
+    ></app-task-item>
   </ion-list>
 </div>
 
@@ -141,7 +127,7 @@
                 formControlName="description"
                 (keyup.enter)="
                   newTask.valid && updateTask(updateTaskForm.value);
-                  newTask.resetForm()
+                  newTask.valid && newTask.resetForm()
                 "
               ></ion-input>
             </ion-item>
@@ -157,23 +143,12 @@
     <ion-list-header>
       <ion-label>Finished</ion-label>
     </ion-list-header>
-    <ion-item *ngFor="let task of completedTasks" (click)="unToggleTask(task)">
-      <ion-label>{{ task.title }}</ion-label>
-      <ion-label>{{ task.urgentLevel }}</ion-label>
-      <ion-label>{{ task.description }}</ion-label>
-      <ion-checkbox slot="start" [checked]="task.completed"></ion-checkbox>
-      <ion-button shape="round" fill="clear">
-        <ion-icon name="create-outline"></ion-icon
-      ></ion-button>
-      <ion-button
-        click-stop-propagation
-        color="medium"
-        shape="round"
-        fill="clear"
-        (click)="deleteTaskFromCompleted(task)"
-      >
-        <ion-icon name="close-circle-outline"></ion-icon>
-      </ion-button>
-    </ion-item>
+    <app-task-item
+      *ngFor="let task of completedTasks"
+      [task]="task"
+      (openModel)="openModel(task)"
+      (unToggleTask)="unToggleTask(task)"
+      (deleteTaskFromCompleted)="deleteTaskFromCompleted(task)"
+    ></app-task-item>
   </ion-list>
 </div>

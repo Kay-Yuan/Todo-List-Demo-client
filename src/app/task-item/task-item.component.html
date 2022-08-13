@@ -1,0 +1,24 @@
+<ion-item (click)="task.completed ? onUnToggleTask(task) : onToggleTask(task)">
+  <ion-checkbox slot="start" [checked]="task.completed"></ion-checkbox>
+
+  <ion-label>{{ task.title }}</ion-label>
+  <ion-label>{{ task.urgentLevel }}</ion-label>
+  <ion-label>{{ task.description }}</ion-label>
+
+  <ion-button shape="round" fill="clear" (click)="onOpenModel(task)">
+    <ion-icon name="create-outline"></ion-icon
+  ></ion-button>
+  <ion-button
+    click-stop-propagation
+    color="medium"
+    shape="round"
+    fill="clear"
+    (click)="
+      task.completed
+        ? onDeleteTaskFromCompleted(task)
+        : onDeleteTaskFromTaskList(task)
+    "
+  >
+    <ion-icon name="close-circle-outline"></ion-icon>
+  </ion-button>
+</ion-item>

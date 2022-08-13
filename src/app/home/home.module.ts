@@ -8,6 +8,7 @@ import { HomePageRoutingModule } from './home-routing.module';
 import { TaskListItemComponent } from '../task-list-item/task-list-item.component';
 
 import { EditTaskModelComponent } from '../edit-task-model/edit-task-model.component';
+import { TaskItemComponent } from '../task-item/task-item.component';
 
 @NgModule({
   imports: [
@@ -17,6 +18,11 @@ import { EditTaskModelComponent } from '../edit-task-model/edit-task-model.compo
     HomePageRoutingModule,
     ReactiveFormsModule,
   ],
-  declarations: [HomePage, TaskListItemComponent, EditTaskModelComponent],
+  declarations: [
+    HomePage,
+    TaskListItemComponent,
+    EditTaskModelComponent,
+    TaskItemComponent,
+  ],
 })
 export class HomePageModule {}
