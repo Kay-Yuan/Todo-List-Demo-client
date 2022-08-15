@@ -15,16 +15,12 @@ export class TaskListItemComponent implements OnInit {
   @Output() completedTasks: Task[];
   isModalOpen = false;
 
-  updateTaskForm = new FormGroup({
+  updateTaskForm: FormGroup = new FormGroup({
     title: new FormControl(''),
     description: new FormControl(''),
     urgentLevel: new FormControl(''),
     id: new FormControl(''),
   });
-
-  message =
-    'This modal example uses the modalController to present and dismiss modals.';
-  name: string;
 
   constructor(private taskService: TaskService) {}
 
@@ -33,6 +29,13 @@ export class TaskListItemComponent implements OnInit {
   }
 
   addTask(task: any) {
+    if (task.description === '') {
+      task.description = '';
+    }
+    if (task.urgentLevel === '') {
+      task.urgentLevel = 1;
+    }
+
     this.taskService.createTask(task).subscribe((data: any) => {
       console.log(data);
       if (data.message === 'Task created') {

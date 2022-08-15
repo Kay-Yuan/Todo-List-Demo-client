@@ -1,24 +1,75 @@
-<ion-item (click)="task.completed ? onUnToggleTask(task) : onToggleTask(task)">
-  <ion-checkbox slot="start" [checked]="task.completed"></ion-checkbox>
+<ion-item (click)="task?.completed ? onUnToggleTask(task) : onToggleTask(task)">
+  <ion-checkbox slot="start" [checked]="task?.completed"></ion-checkbox>
 
-  <ion-label>{{ task.title }}</ion-label>
-  <ion-label>{{ task.urgentLevel }}</ion-label>
-  <ion-label>{{ task.description }}</ion-label>
+  <ion-grid>
+    <ion-row>
+      <ion-col
+        ><ion-label *ngIf="!isInLineEdit">{{ task?.title }}</ion-label>
+        <ion-input
+          *ngIf="isInLineEdit"
+          [(ngModel)]="task.title"
+          (ionBlur)="onTitleChange()"
+          (click)="$event.stopPropagation()"
+        ></ion-input
+      ></ion-col>
+      <ion-col
+        ><ion-label *ngIf="!isInLineEdit">{{ task?.urgentLevel }}</ion-label
+        ><ion-input
+          *ngIf="isInLineEdit"
+          [(ngModel)]="task.urgentLevel"
+          (ionBlur)="onUrgentLevelChange()"
+          (click)="$event.stopPropagation()"
+        ></ion-input
+      ></ion-col>
+      <ion-col
+        ><ion-label *ngIf="!isInLineEdit">{{ task?.description }}</ion-label
+        ><ion-input
+          *ngIf="isInLineEdit"
+          [(ngModel)]="task.description"
+          (ionBlur)="onDescriptionChange()"
+          (click)="$event.stopPropagation()"
+        ></ion-input
+      ></ion-col>
+    </ion-row>
+  </ion-grid>
 
-  <ion-button shape="round" fill="clear" (click)="onOpenModel(task)">
+  <ion-button
+    *ngIf="!isInLineEdit"
+    shape="round"
+    fill="clear"
+    (click)="onConfirmUpdate(task); $event.stopPropagation()"
+  >
     <ion-icon name="create-outline"></ion-icon
   ></ion-button>
   <ion-button
-    click-stop-propagation
+    *ngIf="!isInLineEdit"
     color="medium"
     shape="round"
     fill="clear"
     (click)="
-      task.completed
+      task?.completed
         ? onDeleteTaskFromCompleted(task)
         : onDeleteTaskFromTaskList(task)
     "
   >
     <ion-icon name="close-circle-outline"></ion-icon>
   </ion-button>
+
+  <ion-button
+    *ngIf="isInLineEdit"
+    shape="round"
+    fill="clear"
+    (click)="flipInLineEdit(); $event.stopPropagation()"
+  >
+    <ion-icon name="checkmark-circle-outline"></ion-icon
+  ></ion-button>
+
+  <ion-button
+    *ngIf="isInLineEdit"
+    shape="round"
+    fill="clear"
+    (click)="flipInLineEdit(); $event.stopPropagation()"
+  >
+    <ion-icon name="close-circle-outline"></ion-icon
+  ></ion-button>
 </ion-item>

@@ -54,9 +54,13 @@
 <div id="container">
   <ion-list id="task-list">
     <ion-list-header>
-      <ion-label>Title</ion-label>
-      <ion-label>Urgent Level</ion-label>
-      <ion-label>Description</ion-label>
+      <ion-grid>
+        <ion-row>
+          <ion-col>Title</ion-col>
+          <ion-col>Urgent Level</ion-col>
+          <ion-col>Description</ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-list-header>
     <app-task-item
       *ngFor="let task of toDoTasks"
