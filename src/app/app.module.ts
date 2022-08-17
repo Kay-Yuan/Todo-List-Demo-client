@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { TaskService } from './task.service';
 import { ClickStopPropagationDirective } from './directive/stop-click/click-stop-propagation.directive';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [AppComponent, ClickStopPropagationDirective],
@@ -17,6 +18,7 @@ import { ClickStopPropagationDirective } from './directive/stop-click/click-stop
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
+    BrowserAnimationsModule,
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
