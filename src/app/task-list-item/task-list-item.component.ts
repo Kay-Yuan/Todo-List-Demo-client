@@ -46,10 +46,6 @@ export class TaskListItemComponent implements OnInit {
         this.toDoTasks.push(task);
       }
     });
-
-    // this.taskService.createTask(task);
-    // console.log('Task added');
-    // this.toDoTasks = this.taskService.getTasks().filter((t) => !t.completed);
   }
 
   toggleTask(task: Task) {
@@ -85,7 +81,6 @@ export class TaskListItemComponent implements OnInit {
   }
 
   openModel(task: Task) {
-    console.log(task);
     this.updateTaskForm.setValue({
       title: task.title,
       description: task.description,
@@ -93,7 +88,6 @@ export class TaskListItemComponent implements OnInit {
       id: task.id,
     });
     this.isModalOpen = true;
-    console.log('Task updated');
   }
 
   updateTask(updateTaskForm: any) {
@@ -133,7 +127,6 @@ export class TaskListItemComponent implements OnInit {
   updateForm() {
     this.taskService.getTasksFromServer().subscribe(
       (tasks) => {
-        console.log('Got data from service');
         this.toDoTasks = tasks.filter((t) => !t.completed);
         this.completedTasks = tasks.filter((t) => t.completed);
       },

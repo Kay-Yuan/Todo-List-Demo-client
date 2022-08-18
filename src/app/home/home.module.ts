@@ -9,6 +9,7 @@ import { TaskListItemComponent } from '../task-list-item/task-list-item.componen
 
 import { EditTaskModelComponent } from '../edit-task-model/edit-task-model.component';
 import { TaskItemComponent } from '../task-item/task-item.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { TaskItemComponent } from '../task-item/task-item.component';
     IonicModule,
     HomePageRoutingModule,
     ReactiveFormsModule,
+    HttpClientModule,
   ],
   declarations: [
     HomePage,
@@ -24,5 +26,6 @@ import { TaskItemComponent } from '../task-item/task-item.component';
     EditTaskModelComponent,
     TaskItemComponent,
   ],
+  exports: [TaskListItemComponent],
 })
 export class HomePageModule {}
