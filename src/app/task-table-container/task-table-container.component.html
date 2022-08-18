@@ -1,0 +1,35 @@
+<app-drag-table
+  [id]="'p1'"
+  [tasks]="p1Task"
+  [tableTitle]="'1st Priority Tasks'"
+  [connectTo]="dls"
+  (selectedRowsChange)="onSelectedRowsChange($event)"
+  (dropChange)="drop($event)"
+  (statusChange)="onStatusChange($event)"
+></app-drag-table>
+<app-drag-table
+  [id]="'p2'"
+  [tasks]="p2Task"
+  [tableTitle]="'2nd Priority Tasks'"
+  [connectTo]="dls"
+  (selectedRowsChange)="onSelectedRowsChange($event)"
+  (dropChange)="drop($event)"
+></app-drag-table>
+<app-drag-table
+  [id]="'p3'"
+  [tasks]="p3Task"
+  [tableTitle]="'3rd Priority Tasks'"
+  [connectTo]="dls"
+  (selectedRowsChange)="onSelectedRowsChange($event)"
+  (dropChange)="drop($event)"
+></app-drag-table>
+
+<app-completed-table
+  [id]="'completed'"
+  [tasks]="completedTask"
+  [connectTo]="dls"
+  (selectedRowsChange)="onSelectedRowsChange($event)"
+  (dropChange)="drop($event)"
+></app-completed-table>
+
+<!-- <ion-button (click)="onAdd()">Add</ion-button> -->

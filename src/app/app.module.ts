@@ -10,6 +10,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { TaskService } from './task.service';
 import { ClickStopPropagationDirective } from './directive/stop-click/click-stop-propagation.directive';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [AppComponent, ClickStopPropagationDirective],
@@ -19,6 +21,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    MatTableModule,
+    MatSortModule,
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
