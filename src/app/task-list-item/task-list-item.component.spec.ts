@@ -1,6 +1,8 @@
+import { DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
 // import 'rxjs/add/observable/from';
 
@@ -16,7 +18,7 @@ describe('TaskListItemComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [TaskListItemComponent],
+      declarations: [TaskListItemComponent, TaskItemComponent],
       imports: [IonicModule.forRoot(), FormsModule],
       providers: [
         {
@@ -27,6 +29,7 @@ describe('TaskListItemComponent', () => {
     }).compileComponents();
     fixture = TestBed.createComponent(TaskListItemComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
   }));
   it('should create', () => {

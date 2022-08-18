@@ -108,6 +108,7 @@ export class TaskListItemComponent implements OnInit {
       this.completedTasks[index].urgentLevel = task.urgentLevel;
     }
 
+
     const taskArchived = this.toDoTasks[index];
 
     this.taskService.updateTask(task).subscribe(

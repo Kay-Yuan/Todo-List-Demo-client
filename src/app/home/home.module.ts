@@ -28,6 +28,7 @@ import { TaskTableContainerComponent } from '../task-table-container/task-table-
     MatSortModule,
     DragDropModule,
     MatCheckboxModule,
+
   ],
   declarations: [
     HomePage,
@@ -38,5 +39,6 @@ import { TaskTableContainerComponent } from '../task-table-container/task-table-
     CompletedTableComponent,
     TaskTableContainerComponent,
   ],
+  exports: [TaskListItemComponent],
 })
 export class HomePageModule {}
