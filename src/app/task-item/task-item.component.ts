@@ -15,6 +15,7 @@ export class TaskItemComponent {
   @Output() unToggleTask = new EventEmitter();
   @Output() deleteTaskFromTaskList = new EventEmitter();
   @Output() deleteTaskFromCompleted = new EventEmitter();
+  @Output() confirmUpdate = new EventEmitter();
 
   constructor() {
     //ss
@@ -30,12 +31,6 @@ export class TaskItemComponent {
 
   onUrgentLevelChange() {
     console.log('task urgent level is ' + this.task.urgentLevel);
-  }
-
-  onOpenModel(task: Task) {
-    this.flipInLineEdit();
-    console.log('task +' + task);
-    this.openModel.emit(task);
   }
 
   onToggleTask(task: Task) {
@@ -56,5 +51,11 @@ export class TaskItemComponent {
 
   flipInLineEdit() {
     this.isInLineEdit = !this.isInLineEdit;
+  }
+
+  onConfirmUpdate(task: Task) {
+    // console.log('onConfirmUpdate + task is ' + task.title);
+    this.flipInLineEdit();
+    this.confirmUpdate.emit(task);
   }
 }

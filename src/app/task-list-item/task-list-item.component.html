@@ -53,106 +53,53 @@
 
 <div id="container">
   <ion-list id="task-list">
-    <ion-list-header>
+    <ion-list-header lines="inset">
       <ion-grid>
         <ion-row>
           <ion-col>Title</ion-col>
-          <ion-col>Urgent Level</ion-col>
+          <ion-col
+            ><span>Urgent Level</span
+            ><ion-button
+              shape="round"
+              fill="clear"
+              size="small"
+              (click)="onSortByUrgentLevel()"
+            >
+              <ion-icon name="swap-vertical-outline"></ion-icon></ion-button
+          ></ion-col>
+
           <ion-col>Description</ion-col>
         </ion-row>
       </ion-grid>
+      <!-- <ion-label>Title</ion-label>
+
+      <ion-label>Urgent Level</ion-label>
+      <ion-button shape="round" fill="clear"
+        ><ion-icon name="swap-vertical-outline"></ion-icon
+      ></ion-button>
+      <ion-label>Description</ion-label> -->
     </ion-list-header>
     <app-task-item
       *ngFor="let task of toDoTasks"
       [task]="task"
-      (openModel)="openModel(task)"
-      (toggleTask)="toggleTask(task)"
-      (deleteTaskFromTaskList)="deleteTaskFromTaskList(task)"
+      (toggleTask)="toggleTask($event)"
+      (deleteTaskFromTaskList)="deleteTaskFromTaskList($event)"
+      (confirmUpdate)="onUpdateTask($event)"
     ></app-task-item>
   </ion-list>
 </div>
 
-<ion-modal [isOpen]="isModalOpen">
-  <ng-template>
-    <form [formGroup]="updateTaskForm">
-      <ion-header>
-        <ion-toolbar>
-          <ion-buttons slot="start">
-            <ion-button (click)="cancel()">Cancel</ion-button>
-          </ion-buttons>
-          <ion-title>Edit Task</ion-title>
-          <ion-buttons slot="end">
-            <ion-button
-              id="add-task-button"
-              size="default"
-              color="primary"
-              type="submit"
-              [disabled]="updateTaskForm.invalid"
-              (click)="updateTask(updateTaskForm)"
-              [strong]="true"
-              >Confirm</ion-button
-            >
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-
-      <ion-grid>
-        <ion-row>
-          <ion-col>
-            <ion-item>
-              <ion-label position="floating">Task Title</ion-label>
-              <ion-input
-                required
-                type="text"
-                formControlName="title"
-                #taskTitle
-              ></ion-input>
-            </ion-item>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            <ion-item style="padding-top: 7px">
-              <ion-label>Urgent Level</ion-label>
-              <ion-select formControlName="urgentLevel">
-                <ion-select-option value="1">1</ion-select-option>
-                <ion-select-option value="2">2</ion-select-option>
-                <ion-select-option value="3">3</ion-select-option>
-              </ion-select>
-            </ion-item>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            <ion-item>
-              <ion-label position="floating">Description</ion-label>
-              <ion-input
-                type="text"
-                formControlName="description"
-                (keyup.enter)="
-                  newTask.valid && updateTask(updateTaskForm.value);
-                  newTask.valid && newTask.resetForm()
-                "
-              ></ion-input>
-            </ion-item>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </form>
-  </ng-template>
-</ion-modal>
-
 <div id="completed">
   <ion-list id="task-list">
-    <ion-list-header>
+    <ion-list-header lines="inset">
       <ion-label>Finished</ion-label>
     </ion-list-header>
     <app-task-item
       *ngFor="let task of completedTasks"
       [task]="task"
-      (openModel)="openModel(task)"
-      (unToggleTask)="unToggleTask(task)"
-      (deleteTaskFromCompleted)="deleteTaskFromCompleted(task)"
+      (unToggleTask)="unToggleTask($event)"
+      (deleteTaskFromCompleted)="deleteTaskFromCompleted($event)"
+      (confirmUpdate)="onUpdateTask($event)"
     ></app-task-item>
   </ion-list>
 </div>

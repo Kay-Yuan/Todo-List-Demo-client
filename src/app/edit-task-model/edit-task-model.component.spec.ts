@@ -1,10 +1,12 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { of } from 'rxjs';
 import { TaskService } from '../task.service';
+import { of } from 'rxjs';
+
 
 import { EditTaskModelComponent } from './edit-task-model.component';
+import { FormsModule } from '@angular/forms';
 
 describe('EditTaskModelComponent', () => {
   let component: EditTaskModelComponent;
@@ -16,7 +18,13 @@ describe('EditTaskModelComponent', () => {
     TestBed.configureTestingModule({
       declarations: [EditTaskModelComponent],
       imports: [IonicModule.forRoot(), FormsModule],
-      providers: [{ provide: TaskService, useValue: taskSpy }],
+      providers: [
+        {
+          provide: TaskService,
+          useValue: taskSpy,
+        },
+      ],
+
     }).compileComponents();
 
     fixture = TestBed.createComponent(EditTaskModelComponent);

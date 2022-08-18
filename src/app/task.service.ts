@@ -17,7 +17,6 @@ export class TaskService {
     return this.http.get(`${this.url}/task?offset=0`).pipe(
       tap((data: any[]) => {
         this.tasks = data as Task[];
-        console.log(this.tasks);
       }),
       catchError(this.handleError('getTasksFromServer', []))
     );
@@ -41,7 +40,7 @@ export class TaskService {
     );
   }
 
-  updateTask(task: any): Observable<object> {
+  updateTask(task: Task): Observable<object> {
     return this.http
       .put(`${this.url}/task/${task.id}`, task)
       .pipe(catchError(this.handleError('updateTask', [])));

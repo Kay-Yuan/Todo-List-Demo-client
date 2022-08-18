@@ -13,7 +13,14 @@
         ></ion-input
       ></ion-col>
       <ion-col
-        ><ion-label *ngIf="!isInLineEdit">{{ task?.urgentLevel }}</ion-label
+        ><ion-label
+          *ngIf="!isInLineEdit"
+          [ngClass]="{
+            first: task.urgentLevel === 1,
+            second: task.urgentLevel === 2,
+            third: task.urgentLevel === 3
+          }"
+          >{{ task?.urgentLevel }}</ion-label
         ><ion-input
           *ngIf="isInLineEdit"
           [(ngModel)]="task.urgentLevel"
@@ -37,7 +44,8 @@
     *ngIf="!isInLineEdit"
     shape="round"
     fill="clear"
-    (click)="onOpenModel(task); $event.stopPropagation()"
+    (click)="flipInLineEdit(); $event.stopPropagation()"
+
   >
     <ion-icon name="create-outline"></ion-icon
   ></ion-button>
@@ -59,7 +67,7 @@
     *ngIf="isInLineEdit"
     shape="round"
     fill="clear"
-    (click)="flipInLineEdit(); $event.stopPropagation()"
+    (click)="onConfirmUpdate(task); $event.stopPropagation()"
   >
     <ion-icon name="checkmark-circle-outline"></ion-icon
   ></ion-button>

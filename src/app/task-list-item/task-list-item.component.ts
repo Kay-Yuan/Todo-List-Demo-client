@@ -14,6 +14,7 @@ export class TaskListItemComponent implements OnInit {
   @Output() toDoTasks: Task[];
   @Output() completedTasks: Task[];
   isModalOpen = false;
+  sortOrder = true;
 
   updateTaskForm: FormGroup = new FormGroup({
     title: new FormControl(''),
@@ -56,6 +57,7 @@ export class TaskListItemComponent implements OnInit {
     this.completedTasks = this.sortTasks(this.completedTasks);
 
     //update task status
+    this.updateTaskStatus(task);
   }
 
   unToggleTask(task: Task) {
@@ -68,6 +70,18 @@ export class TaskListItemComponent implements OnInit {
     this.toDoTasks = this.sortTasks(this.toDoTasks);
 
     //update task status
+    this.updateTaskStatus(task);
+  }
+
+  updateTaskStatus(task: Task) {
+    this.taskService.updateTask(task).subscribe(
+      (response) => {
+        console.log(response);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
   deleteTaskFromTaskList(task: Task) {
@@ -80,45 +94,37 @@ export class TaskListItemComponent implements OnInit {
     this.completedTasks = this.completedTasks.filter((t) => t.id !== task?.id);
   }
 
-  openModel(task: Task) {
-    this.updateTaskForm.setValue({
-      title: task.title,
-      description: task.description,
-      urgentLevel: task.urgentLevel.toString(),
-      id: task.id,
-    });
-    this.isModalOpen = true;
-  }
+  onUpdateTask(task: Task) {
+    let index: number = this.toDoTasks.findIndex((t) => t.id === task.id);
 
-  updateTask(updateTaskForm: any) {
-    this.taskService.updateTask(updateTaskForm.value).subscribe(
+    if (index !== -1) {
+      this.toDoTasks[index].title = task.title;
+      this.toDoTasks[index].description = task.description;
+      this.toDoTasks[index].urgentLevel = task.urgentLevel;
+    } else {
+      index = this.completedTasks.findIndex((t) => t.id === task.id);
+      this.completedTasks[index].title = task.title;
+      this.completedTasks[index].description = task.description;
+      this.completedTasks[index].urgentLevel = task.urgentLevel;
+    }
+
+
+    const taskArchived = this.toDoTasks[index];
+
+    this.taskService.updateTask(task).subscribe(
       (response) => {
-        let index = this.toDoTasks.findIndex(
-          (t) => t.id === updateTaskForm.value.id
-        );
-        if (index !== -1) {
-          this.toDoTasks[index].title = updateTaskForm.value.title;
-          this.toDoTasks[index].description = updateTaskForm.value.description;
-          this.toDoTasks[index].urgentLevel = updateTaskForm.value.urgentLevel;
-          console.log(this.toDoTasks[index]);
-        } else {
-          index = this.completedTasks.findIndex(
-            (t) => t.id === updateTaskForm.value.id
-          );
-          if (index !== -1) {
-            this.completedTasks[index].title = updateTaskForm.value.title;
-            this.completedTasks[index].description =
-              updateTaskForm.value.description;
-            this.completedTasks[index].urgentLevel =
-              updateTaskForm.value.urgentLevel;
-            console.log(this.completedTasks[index]);
-          }
-        }
         console.log(response);
-        this.isModalOpen = false;
-        this.updateTaskForm.reset();
       },
       (error) => {
+        // rollback changes
+        let index2 = this.toDoTasks.findIndex((t) => t.id === task.id);
+        if (index2 !== -1) {
+          this.toDoTasks[index2] = taskArchived;
+        } else {
+          index2 = this.completedTasks.findIndex((t) => t.id === task.id);
+          this.completedTasks[index2] = taskArchived;
+        }
+
         console.log(error);
       }
     );
@@ -127,27 +133,24 @@ export class TaskListItemComponent implements OnInit {
   updateForm() {
     this.taskService.getTasksFromServer().subscribe(
       (tasks) => {
-        this.toDoTasks = tasks.filter((t) => !t.completed);
-        this.completedTasks = tasks.filter((t) => t.completed);
+        console.log('Got data from service');
+        this.toDoTasks = this.sortTasks(tasks.filter((t) => !t.completed));
+        this.completedTasks = this.sortTasks(tasks.filter((t) => t.completed));
       },
       (error) => {
         console.log(error);
       }
     );
-
-    // const tasks = this.taskService.getTasks();
-    // this.toDoTasks = tasks.filter((t) => !t.completed);
-    // this.completedTasks = tasks.filter((t) => t.completed);
   }
 
   sortTasks(
     tasks: Task[],
     sortBy: string = 'urgentLevel',
-    sortOrder: string = 'asc'
+    sortOrderAsc: boolean = true
   ): Task[] {
     if (sortBy === 'urgentLevel') {
       tasks.sort((a, b) => {
-        if (sortOrder === 'asc') {
+        if (sortOrderAsc) {
           return a.urgentLevel - b.urgentLevel;
         } else {
           return b.urgentLevel - a.urgentLevel;
@@ -155,7 +158,7 @@ export class TaskListItemComponent implements OnInit {
       });
     } else {
       tasks.sort((a, b) => {
-        if (sortOrder === 'asc') {
+        if (sortOrderAsc) {
           return a[sortBy] - b[sortBy];
         } else {
           return b[sortBy] - a[sortBy];
@@ -163,6 +166,20 @@ export class TaskListItemComponent implements OnInit {
       });
     }
     return tasks;
+  }
+
+  onSortByUrgentLevel() {
+    this.sortOrder = !this.sortOrder;
+    this.toDoTasks = this.sortTasks(
+      this.toDoTasks,
+      'urgentLevel',
+      this.sortOrder
+    );
+    this.completedTasks = this.sortTasks(
+      this.completedTasks,
+      'urgentLevel',
+      this.sortOrder
+    );
   }
 
   cancel() {

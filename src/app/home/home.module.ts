@@ -9,7 +9,13 @@ import { TaskListItemComponent } from '../task-list-item/task-list-item.componen
 
 import { EditTaskModelComponent } from '../edit-task-model/edit-task-model.component';
 import { TaskItemComponent } from '../task-item/task-item.component';
-import { HttpClientModule } from '@angular/common/http';
+import { DragTableComponent } from '../drag-table/drag-table.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { CompletedTableComponent } from '../completed-table/completed-table.component';
+import { TaskTableContainerComponent } from '../task-table-container/task-table-container.component';
 
 @NgModule({
   imports: [
@@ -18,13 +24,20 @@ import { HttpClientModule } from '@angular/common/http';
     IonicModule,
     HomePageRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule,
+    MatTableModule,
+    MatSortModule,
+    DragDropModule,
+    MatCheckboxModule,
+
   ],
   declarations: [
     HomePage,
     TaskListItemComponent,
     EditTaskModelComponent,
     TaskItemComponent,
+    DragTableComponent,
+    CompletedTableComponent,
+    TaskTableContainerComponent,
   ],
   exports: [TaskListItemComponent],
 })
