@@ -3,12 +3,10 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomePage } from './home.page';
+import { MatIconModule } from '@angular/material/icon';
 
 import { HomePageRoutingModule } from './home-routing.module';
-import { TaskListItemComponent } from '../task-list-item/task-list-item.component';
 
-import { EditTaskModelComponent } from '../edit-task-model/edit-task-model.component';
-import { TaskItemComponent } from '../task-item/task-item.component';
 import { DragTableComponent } from '../drag-table/drag-table.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
@@ -16,6 +14,10 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { CompletedTableComponent } from '../completed-table/completed-table.component';
 import { TaskTableContainerComponent } from '../task-table-container/task-table-container.component';
+import { CdkTableModule } from '@angular/cdk/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   imports: [
@@ -28,17 +30,18 @@ import { TaskTableContainerComponent } from '../task-table-container/task-table-
     MatSortModule,
     DragDropModule,
     MatCheckboxModule,
-
+    CdkTableModule,
+    MatIconModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   declarations: [
     HomePage,
-    TaskListItemComponent,
-    EditTaskModelComponent,
-    TaskItemComponent,
     DragTableComponent,
     CompletedTableComponent,
     TaskTableContainerComponent,
   ],
-  exports: [TaskListItemComponent],
+  exports: [TaskTableContainerComponent],
 })
 export class HomePageModule {}

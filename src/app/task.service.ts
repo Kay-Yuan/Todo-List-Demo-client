@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { Task } from './task';
+import { PreTask, Task } from './task';
 import { tap, catchError } from 'rxjs/operators';
+import { CreateTaskResponse } from './api-response';
 
 @Injectable()
 export class TaskService {
@@ -15,8 +16,8 @@ export class TaskService {
 
   getTasksFromServer(): Observable<Task[]> {
     return this.http.get(`${this.url}/task?offset=0`).pipe(
-      tap((data: any[]) => {
-        this.tasks = data as Task[];
+      tap((data: Task[]) => {
+        this.tasks = data;
       }),
       catchError(this.handleError('getTasksFromServer', []))
     );
@@ -26,15 +27,15 @@ export class TaskService {
     return this.tasks;
   }
 
-  createTask(task: any): Observable<object> {
+  createTask(task: PreTask): Observable<CreateTaskResponse> {
     return this.http.post(`${this.url}/task/create`, task).pipe(
       tap((data: any) => {
-        task.id = data.id;
-        task.completed = false;
-        task.isEdit = false;
-        task.createdAt = data.createdAt;
-        task.updatedAt = data.updatedAt;
-        this.tasks.push(task);
+        task['id'] = data.id;
+        task['completed'] = false;
+        task['isEdit'] = false;
+        task['createdAt'] = data.createdAt;
+        task['updatedAt'] = data.updatedAt;
+        this.tasks.push(task as Task);
       }),
       catchError(this.handleError('createTask', []))
     );

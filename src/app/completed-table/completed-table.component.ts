@@ -6,9 +6,9 @@ import {
 import {
   AfterViewInit,
   Component,
+  DoCheck,
   EventEmitter,
   Input,
-  OnChanges,
   Output,
   ViewChild,
 } from '@angular/core';
@@ -21,7 +21,7 @@ import { Task } from '../task';
   templateUrl: './completed-table.component.html',
   styleUrls: ['./completed-table.component.scss'],
 })
-export class CompletedTableComponent implements AfterViewInit, OnChanges {
+export class CompletedTableComponent implements AfterViewInit, DoCheck {
   displayedColumns: string[] = [
     'checkBox',
     'title',
@@ -33,6 +33,8 @@ export class CompletedTableComponent implements AfterViewInit, OnChanges {
   @Input() connectTo: string[];
   @Input() id: string;
   @Output() selectedRowsChange = new EventEmitter<Set<Task>>();
+  @Output() statusChange = new EventEmitter<Task>();
+  @Output() dropChange = new EventEmitter<CdkDragDrop<Task[]>>();
   dataSource: MatTableDataSource<Task>;
   selectedRows = new Set<Task>();
   @ViewChild(MatSort) sort: MatSort;
@@ -73,10 +75,8 @@ export class CompletedTableComponent implements AfterViewInit, OnChanges {
     this.dataSource = new MatTableDataSource();
   }
 
-  ngOnChanges() {
+  ngDoCheck() {
     this.dataSource.data = this.tasks;
-    console.log('onChanges');
-    console.log(this.tasks);
   }
 
   ngAfterViewInit() {
@@ -99,8 +99,7 @@ export class CompletedTableComponent implements AfterViewInit, OnChanges {
         event.currentIndex
       );
     }
-    this.dataSource.data = this.tasks;
-    console.log(this.dataSource.data);
+    this.dropChange.emit(event);
   }
 
   onSortChange(sort: Sort) {
@@ -115,5 +114,14 @@ export class CompletedTableComponent implements AfterViewInit, OnChanges {
     }
 
     this.selectedRowsChange.emit(this.selectedRows);
+  }
+
+  onTaskStatusChange(task: Task) {
+    console.log('toggle task id = ' + task.id + ' task title = ' + task.title);
+    this.dataSource.data = this.dataSource.data.filter((t) => t.id !== task.id);
+    this.statusChange.emit(task);
+
+    //update task status
+    // this.updateTaskStatus(task);
   }
 }
