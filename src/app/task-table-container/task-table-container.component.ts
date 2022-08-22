@@ -190,4 +190,37 @@ export class TaskTableContainerComponent {
   onSortChange(event: Sort) {
     console.log(event);
   }
+  onUrgentLevelChange(event: { task: Task; originUrgentLevel: number }) {
+    console.log(event);
+    switch (event.originUrgentLevel) {
+      case 1:
+        this.p1Task = this.p1Task.filter((t) => t.id !== event.task.id);
+        break;
+      case 2:
+        this.p2Task = this.p2Task.filter((t) => t.id !== event.task.id);
+        break;
+      case 3:
+        this.p3Task = this.p3Task.filter((t) => t.id !== event.task.id);
+        break;
+    }
+
+    let buffer: Task[];
+    switch (+event.task.urgentLevel) {
+      case 1:
+        buffer = JSON.parse(JSON.stringify(this.p1Task));
+        buffer.push(event.task);
+        this.p1Task = buffer;
+        break;
+      case 2:
+        buffer = JSON.parse(JSON.stringify(this.p2Task));
+        buffer.push(event.task);
+        this.p2Task = buffer;
+        break;
+      case 3:
+        buffer = JSON.parse(JSON.stringify(this.p3Task));
+        buffer.push(event.task);
+        this.p3Task = buffer;
+        break;
+    }
+  }
 }

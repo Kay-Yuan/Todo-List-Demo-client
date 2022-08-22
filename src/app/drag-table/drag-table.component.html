@@ -1,4 +1,4 @@
-<ion-item lines="none">
+<ion-item class="table-title" lines="none">
   <ion-label>{{ tableTitle }}</ion-label>
 </ion-item>
 <table
@@ -13,100 +13,6 @@
   [cdkDropListConnectedTo]="connectTo"
   (cdkDropListDropped)="drop($event)"
 >
-  <!-- <ng-container matColumnDef="title">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      mat-sort-header
-      sortActionDescription="Sort by title"
-    >
-      Title
-    </th>
-
-    <td mat-cell *matCellDef="let task">
-      <span *ngIf="!task.isEdit">{{ task.title }}</span>
-      <input
-        type="text"
-        matInput
-        placeholder="Title"
-        *ngIf="task.isEdit && task.id === '1'"
-      />
-      <input
-        type="text"
-        matInput
-        placeholder="{{ task.title }}"
-        *ngIf="task.isEdit"
-      />
-    </td>
-  </ng-container>
-
-  <ng-container matColumnDef="urgentLevel">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      mat-sort-header
-      sortActionDescription="Sort by urgentLevel"
-    >
-      Urgent Level
-    </th>
-    <td mat-cell *matCellDef="let task">{{ task.urgentLevel }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="description">
-    <th mat-header-cell *matHeaderCellDef>Description</th>
-    <td mat-cell *matCellDef="let task">{{ task.description }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="operation">
-    <th mat-header-cell *matHeaderCellDef>Operation</th>
-    <td mat-cell *matCellDef="let task">
-      <button
-        class="inline-edit-button"
-        mat-button
-        (click)="onConfirm(); $event.stopPropagation()"
-        *ngIf="task.isEdit"
-        color="primary"
-      >
-        Confirm
-      </button>
-      <a
-        class="default-operation-button"
-        *ngIf="!task.isEdit"
-        (click)="onEdit(task); $event.stopPropagation()"
-      >
-        <span class="material-symbols-outlined">info</span>
-      </a>
-
-      <button
-        class="inline-edit-button"
-        mat-button
-        (click)="onClose(task); $event.stopPropagation()"
-        *ngIf="task.isEdit"
-        color="warn"
-      >
-        Cancel
-      </button>
-      <a
-        class="default-operation-button"
-        *ngIf="!task.isEdit"
-        (click)="onDelete(task); $event.stopPropagation()"
-        [style.color]="'red'"
-      >
-        <span class="material-symbols-outlined">cancel</span>
-      </a>
-    </td>
-  </ng-container>
-
-  <ng-container matColumnDef="checkBox">
-    <th mat-header-cell *matHeaderCellDef>Status</th>
-    <td mat-cell *matCellDef="let task">
-      <mat-checkbox
-        (change)="onTaskStatusChange(task)"
-        (click)="$event.stopPropagation()"
-      ></mat-checkbox>
-    </td>
-  </ng-container> -->
-
   <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
     <th
       mat-header-cell
@@ -140,7 +46,7 @@
             <span class="material-symbols-outlined">cancel</span>
           </a>
         </div>
-        <span *ngSwitchDefault>
+        <span class="display-cell" *ngSwitchDefault>
           {{ task[col.key] }}
         </span>
       </div>

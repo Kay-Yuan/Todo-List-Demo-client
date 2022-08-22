@@ -43,6 +43,11 @@ export class DragTableComponent implements AfterViewInit, DoCheck {
   @Output() statusChange = new EventEmitter<Task>();
   @Output() dropChange = new EventEmitter<CdkDragDrop<Task[]>>();
   @Output() addNewTask = new EventEmitter<Task>();
+  @Output() urgentLevelChange = new EventEmitter<{
+    task: Task;
+    originUrgentLevel: number;
+  }>();
+
   dataSource: MatTableDataSource<Task>;
   beforeEditTask: Task[] = [];
 
@@ -148,6 +153,12 @@ export class DragTableComponent implements AfterViewInit, DoCheck {
           }
         });
     } else {
+      if (task.urgentLevel !== parseInt(this.id.match(/\d+/)[0], 10)) {
+        //emit event move to other table
+        const originUrgentLevel = parseInt(this.id.match(/\d+/)[0], 10);
+        this.urgentLevelChange.emit({ task, originUrgentLevel });
+      }
+
       //update database
       this.taskService.updateTask(task).subscribe(
         (response) => {
@@ -201,15 +212,10 @@ export class DragTableComponent implements AfterViewInit, DoCheck {
     this.taskService.deleteTask(task);
   }
 
-  // onEdit(task: Task) {
-  //   const index = this.dataSource.data.findIndex((t) => t.id === task.id);
-  //   this.dataSource.data[index].isEdit = !task.isEdit;
+  // inputHandler(e: any, id: number, key: string) {
+  //   console.log(e);
+  //   console.log('id = ' + id + ' key = ' + key);
   // }
-
-  inputHandler(e: any, id: number, key: string) {
-    console.log(e);
-    console.log('id = ' + id + ' key = ' + key);
-  }
 
   validateNewTask(task: Task) {
     if (task.title === '') {

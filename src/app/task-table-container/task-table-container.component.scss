@@ -8,6 +8,10 @@
   align-items: center;
 }
 
+.mat-sort-header-container {
+  margin-left: 40%;
+}
+
 @media only screen and (max-width: 1300px){
   .priority-table-container {
   flex-direction: column;
